@@ -473,7 +473,7 @@ function qresult(){
  el.innerHTML+=''
  +'<div class="rbars">'+T.map((x,j)=>'<span>'+x.n+'</span><div class="bar"><i style="width:'+r.sc[j].toFixed(0)+'%"></i></div><b style="text-align:right">'+Math.round(r.sc[j])+'</b>').join('')+'</div>'
  +'<div class="ractions"><button class="solid" id="qload"><span>See me in the model</span></button><button id="qagain">Retake</button></div>';
- document.getElementById('qload').onclick=()=>{load('quiz');sel={k:'t',i:r.i};showCap();draw();document.getElementById('model').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})};
+ document.getElementById('qload').onclick=()=>{load('quiz');sel=r.awake?{k:'h',i:r.h}:{k:'t',i:r.i};showCap();draw();document.getElementById('model').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})};
  document.getElementById('qagain').onclick=()=>{qa.fill(0);qi=0;el.style.display='none';document.getElementById('qbox').style.display='block';qshow()};
 }
 document.querySelectorAll('#scale button').forEach(b=>b.onclick=()=>answer(+b.dataset.v));
