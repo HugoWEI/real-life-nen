@@ -470,7 +470,9 @@ function qresult(){
   +'<div class="tiers"><div class="tier"><span>Master next</span><b>'+CAP[r.i][1]+'</b></div>'
   +'<div class="tier"><span>Weak spot</span><b>'+T[r.lo].n+'</b></div>'
   +'<div class="tier"><span>Specialist</span><b>Closest to '+HUBS[r.h].n+', not awakened</b></div></div>';}
- el.innerHTML+=''
+ const uw=r.awake?r.h:-1;
+ const near=GAL.map(k=>{const q=PR[k];let d=Math.abs(q.i-r.idx)%8;d=Math.min(d,8-d);return {l:q.l,d:d+(q.w!==uw?1.5:0)+Math.abs(q.a-r.aura)/40}}).sort((a,b)=>a.d-b.d).slice(0,3);
+ el.innerHTML+='<div class="tiers"><div class="tier"><span>Closest to you</span><b>'+near.map(x=>x.l).join(' · ')+'</b></div></div>'
  +'<div class="rbars">'+T.map((x,j)=>'<span>'+x.n+'</span><div class="bar"><i style="width:'+r.sc[j].toFixed(0)+'%"></i></div><b style="text-align:right">'+Math.round(r.sc[j])+'</b>').join('')+'</div>'
  +'<div class="ractions"><button class="solid" id="qload"><span>See me in the model</span></button><button id="qagain">Retake</button></div>';
  document.getElementById('qload').onclick=()=>{load('quiz');sel=r.awake?{k:'h',i:r.h}:{k:'t',i:r.i};showCap();draw();document.getElementById('model').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})};
