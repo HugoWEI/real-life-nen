@@ -100,6 +100,26 @@ input[type=range]{width:100%;accent-color:var(--abstract)}
 .tier b{font-size:20px;font-weight:500;line-height:1.35}
 .capcard .meta{font-size:16px;opacity:.9}
 @media (max-width:520px){.tier{grid-template-columns:minmax(0,1fr);gap:4px}}
+.cta{display:inline-block;margin-top:22px;font-family:var(--display);font-weight:700;font-size:22px;padding:14px 26px;border-radius:999px;background:var(--ink);color:var(--bg);text-decoration:none}
+.quiz{max-width:720px}
+.qprog{height:10px;border-radius:6px;background:var(--line);overflow:hidden;margin-bottom:20px}
+.qprog i{display:block;height:100%;width:0;border-radius:6px;transition:width .25s,background .25s}
+.qmeta{display:flex;justify-content:space-between;font-size:15px;color:var(--muted);margin-bottom:10px}
+.qtext{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.6vw,36px);line-height:1.15;min-height:3.5em;text-wrap:balance}
+.scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:22px}
+.scale button{font-family:var(--display);font-weight:800;font-size:24px;padding:16px 0;border-radius:18px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+.scale button:hover{border-color:var(--muted)}
+.scale button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ends{display:flex;justify-content:space-between;font-size:15px;color:var(--muted);margin-top:8px}
+.qnav{margin-top:18px;display:flex;gap:10px}
+.qnav button{font-size:16px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.rbars{display:grid;grid-template-columns:96px minmax(0,1fr) 40px;gap:8px 10px;align-items:center;font-size:16px}
+.rbars .bar{background:rgba(255,255,255,.22)}
+.rbars .bar i{background:currentColor}
+.ractions{display:flex;flex-wrap:wrap;gap:10px}
+.ractions button{font-family:var(--display);font-weight:700;font-size:18px;padding:12px 22px;border-radius:999px;border:2px solid currentColor;background:transparent;color:inherit}
+.ractions button.solid{background:currentColor}
+.ractions button.solid span{color:var(--ink)}
 .ringnote{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;font-size:18px}
 .ringnote span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 16px}
 /* specialists */
@@ -135,6 +155,7 @@ footer{padding:40px 0 60px;font-size:15px}
   </div>
   <h1>Real-life Nen</h1>
   <p class="lead">Eight types. One you're born with. Three ways to become a Specialist.</p>
+  <a class="cta" href="#quiz">Find your type →</a>
 </header>
 
 <section class="wrap" id="model">
@@ -156,6 +177,20 @@ footer{padding:40px 0 60px;font-size:15px}
     </div>
   </div>
   <div class="capcard" id="cap" aria-live="polite"></div>
+</section>
+
+<section class="wrap" id="quiz">
+  <h2>Find your type</h2>
+  <p class="muted" style="margin:-10px 0 20px;font-size:18px">24 quick statements. Answer from 1 (not me) to 5 (totally me).</p>
+  <div class="quiz card" id="qbox">
+    <div class="qprog"><i id="qbar"></i></div>
+    <div class="qmeta"><span id="qnum">1 / 24</span><span id="qtype"></span></div>
+    <p class="qtext" id="qtext"></p>
+    <div class="scale" id="scale"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button></div>
+    <div class="ends"><span>Not me</span><span>Totally me</span></div>
+    <div class="qnav"><button id="qback">Back</button></div>
+  </div>
+  <div class="capcard" id="qres" aria-live="polite" style="display:none;max-width:720px"></div>
 </section>
 
 <section class="wrap">
@@ -210,24 +245,6 @@ footer{padding:40px 0 60px;font-size:15px}
       <svg viewBox="0 0 70 70" aria-hidden="true"><path d="M35 6 L44 26 L64 28 L49 42 L54 63 L35 52 L16 63 L21 42 L6 28 L26 26 Z" fill="currentColor"/></svg>
       <h3>Commander</h3><p class="from">Body and will side: Dexterity, Inner, Social, Artistic</p>
       <div class="ppl"><span><em>Roosevelt</em></span><span><em>Ali</em></span><span><em>Bruce Lee</em></span></div>
-    </div>
-  </div>
-</section>
-
-<section class="wrap">
-  <h2>Not types</h2>
-  <div class="basics">
-    <div class="card basic">
-      <svg viewBox="0 0 58 58" aria-hidden="true"><circle cx="34" cy="10" r="7" fill="var(--pragmatic)"/><path d="M30 20 L22 34 L32 40 L26 54 M22 34 L10 30 M30 22 L44 30" fill="none" stroke="var(--pragmatic)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div><h3>Fitness is basic training</h3><p>Running, strength, endurance. Every type can train them, like Ten and Ren.</p></div>
-    </div>
-    <div class="card basic">
-      <svg viewBox="0 0 58 58" aria-hidden="true"><path d="M16 8 V30 M5 19 H27" stroke="var(--abstract)" stroke-width="6" stroke-linecap="round"/><path d="M34 34 L52 52 M52 34 L34 52" stroke="var(--abstract)" stroke-width="6" stroke-linecap="round"/></svg>
-      <div><h3>Mental arithmetic is basic training</h3><p>Fast calculation comes from drilling and working memory, not from your type.</p></div>
-    </div>
-    <div class="card basic">
-      <svg viewBox="0 0 58 58" aria-hidden="true"><path d="M29 6 L35 22 L52 22 L38 32 L44 50 L29 39 L14 50 L20 32 L6 22 L23 22 Z" fill="var(--verbal)"/></svg>
-      <div><h3>Taste lives in every domain</h3><p>Proust in sentences, a mathematician in proofs, Jobs in products.</p></div>
     </div>
   </div>
 </section>
@@ -355,6 +372,74 @@ sv.addEventListener('pointerup',e=>{end();if(!down)return;const mv=Math.hypot(e.
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
 new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 function loop(){if(auto&&!drag){yaw+=.004;draw()}requestAnimationFrame(loop)}
+const QS=[
+ [0,"I enjoy understanding why something works, not just that it works."],
+ [1,"I can rotate or assemble objects in my head easily."],
+ [2,"Give me a tool and a goal, and I'll make it work."],
+ [3,"People ask for my opinion on design, clothes or decor."],
+ [4,"I pick up physical skills like sports, instruments or tools fast."],
+ [5,"I stay calm when others panic."],
+ [6,"I can read a room within minutes."],
+ [7,"Writing or speaking clearly comes naturally to me."],
+ [0,"Proofs, definitions and formal rules feel natural to me."],
+ [1,"I rarely get lost, and I read maps or plans quickly."],
+ [2,"I quickly see what matters and drop the rest."],
+ [3,"I notice when colours, sounds or proportions feel off."],
+ [4,"Tasks that need hands and eyes together, like driving or cooking, feel easy."],
+ [5,"I can stick to a hard routine for months."],
+ [6,"Charming or persuading people comes easily to me."],
+ [7,"I love telling stories, arguing a point or playing with words."],
+ [0,"I often spot the hidden pattern or structure others miss."],
+ [1,"I understand how a machine works just by looking at it."],
+ [2,"I'd rather ship something imperfect than theorise forever."],
+ [3,"I make things where the look or feel matters: music, drawing, styling."],
+ [4,"My hands do precise work without me thinking about it."],
+ [5,"I usually know exactly what I feel and why."],
+ [6,"People tend to follow my lead in a group."],
+ [7,"I pick up new languages and words easily."]];
+const GATE=[[1,2,0,3],[7,6,0,5],[4,5,6,3]];
+let qa=new Array(QS.length).fill(0),qi=0;
+function qshow(){
+ const [t,txt]=QS[qi];
+ document.getElementById('qtext').textContent=txt;
+ document.getElementById('qnum').textContent=(qi+1)+' / '+QS.length;
+ document.getElementById('qtype').textContent='';
+ const b=document.getElementById('qbar');b.style.width=(qi/QS.length*100).toFixed(1)+'%';b.style.background='var('+T[t].c+')';
+ document.querySelectorAll('#scale button').forEach(x=>x.classList.toggle('on',+x.dataset.v===qa[qi]));
+ document.getElementById('qback').style.visibility=qi>0?'visible':'hidden';
+}
+function qscore(){
+ const sc=T.map((t,i)=>{const v=QS.map((q,j)=>q[0]===i?qa[j]:null).filter(x=>x);return (v.reduce((a,b)=>a+b,0)/v.length-1)/4*100});
+ const mean=sc.reduce((a,b)=>a+b,0)/8;
+ let i=0;sc.forEach((x,j)=>{if(x>sc[i])i=j});
+ const L=sc[(i+7)%8],R=sc[(i+1)%8];
+ const lean=Math.max(-.45,Math.min(.45,(R-L)/Math.max(1,sc[i]-Math.min(L,R))*.25));
+ const idx=(i+lean+8)%8;
+ const aura=Math.round(Math.max(50,Math.min(150,60+mean*.85)));
+ const sorted=[...sc].sort((a,b)=>a-b);
+ const hubAvg=GATE.map(g=>g.reduce((a,k)=>a+sc[k],0)/g.length);
+ let h=0;hubAvg.forEach((x,k)=>{if(x>hubAvg[h])h=k});
+ const awake=mean>=68&&sorted[2]>=55;
+ let lo=0;sc.forEach((x,j)=>{if(x<sc[lo])lo=j});
+ return {sc,i,idx,lean,aura,h,awake,lo};
+}
+function qresult(){
+ const r=qscore(),t=T[r.i],nb=r.lean>=0?T[(r.i+1)%8]:T[(r.i+7)%8];
+ PR.quiz={l:'Your result',i:r.idx,a:r.aura,w:r.awake?r.h:-1};
+ document.getElementById('qbox').style.display='none';
+ const el=document.getElementById('qres');el.style.display='grid';el.style.background='var('+t.c+')';
+ el.innerHTML='<div class="top"><svg viewBox="0 0 46 46" aria-hidden="true">'+t.ic+'</svg><div><h3>'+t.n+' native</h3><p class="sub">'+(Math.abs(r.lean)>.08?'Leaning '+nb.n:'Pure '+t.n)+' · aura '+r.aura+'</p></div></div>'
+ +'<div class="tiers"><div class="tier"><span>Master next</span><b>'+CAP[r.i][1]+'</b></div>'
+ +'<div class="tier"><span>Weak spot</span><b>'+T[r.lo].n+'</b></div>'
+ +'<div class="tier"><span>Specialist</span><b>'+(r.awake?'Awakened as '+HUBS[r.h].n+': '+HINFO[r.h].sig.toLowerCase():'Closest to '+HUBS[r.h].n+', not awakened')+'</b></div></div>'
+ +'<div class="rbars">'+T.map((x,j)=>'<span>'+x.n+'</span><div class="bar"><i style="width:'+r.sc[j].toFixed(0)+'%"></i></div><b style="text-align:right">'+Math.round(r.sc[j])+'</b>').join('')+'</div>'
+ +'<div class="ractions"><button class="solid" id="qload"><span>See me in the model</span></button><button id="qagain">Retake</button></div>';
+ document.getElementById('qload').onclick=()=>{load('quiz');sel={k:'t',i:r.i};showCap();draw();document.getElementById('model').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})};
+ document.getElementById('qagain').onclick=()=>{qa.fill(0);qi=0;el.style.display='none';document.getElementById('qbox').style.display='block';qshow()};
+}
+document.querySelectorAll('#scale button').forEach(b=>b.onclick=()=>{qa[qi]=+b.dataset.v;if(qi<QS.length-1){qi++;qshow()}else qresult()});
+document.getElementById('qback').onclick=()=>{if(qi>0){qi--;qshow()}};
+qshow();
 load('me');showCap();loop();
 </script>
 </body>
