@@ -86,8 +86,20 @@ input[type=range]{width:100%;accent-color:var(--abstract)}
 .type h3{color:inherit}
 .type p{font-size:17px;opacity:.95}
 .type .nat{font-size:14px;font-weight:700;margin-top:auto;opacity:.9}
-:root[data-theme="dark"] .type{color:#0F0E1A}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .type{color:#0F0E1A}}
+:root[data-theme="dark"] .type,:root[data-theme="dark"] .capcard{color:#0F0E1A}
+:root[data-theme="dark"] .tier{background:rgba(0,0,0,.12)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .type,:root:not([data-theme="light"]) .capcard{color:#0F0E1A}:root:not([data-theme="light"]) .tier{background:rgba(0,0,0,.12)}}
+.capcard{border-radius:26px;padding:26px;color:#fff;margin-top:20px;display:grid;gap:16px;transition:background .3s}
+.capcard .top{display:flex;gap:16px;align-items:center}
+.capcard .top svg{width:56px;height:56px;flex:none}
+.capcard h3{font-size:clamp(34px,6vw,46px);color:inherit}
+.capcard .sub{font-size:18px;opacity:.92}
+.tiers{display:grid;gap:10px}
+.tier{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:baseline;background:rgba(255,255,255,.16);border-radius:16px;padding:14px 16px}
+.tier span{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.85}
+.tier b{font-size:20px;font-weight:500;line-height:1.35}
+.capcard .meta{font-size:16px;opacity:.9}
+@media (max-width:520px){.tier{grid-template-columns:minmax(0,1fr);gap:4px}}
 .ringnote{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;font-size:18px}
 .ringnote span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 16px}
 /* specialists */
@@ -129,7 +141,7 @@ footer{padding:40px 0 60px;font-size:15px}
   <div class="model">
     <div class="card" style="padding:12px">
       <svg id="sv" viewBox="0 0 600 470" role="img" aria-label="Rotatable 3D ring of eight types with three Specialist hubs above"><g id="scene"></g></svg>
-      <p class="hint muted">Drag to rotate · <a href="#" id="spin">pause spin</a></p>
+      <p class="hint muted">Drag to rotate · tap a point · <a href="#" id="spin">pause spin</a></p>
     </div>
     <div class="card">
       <div class="group"><div class="lbl">Try an archetype</div><div class="chips" id="circle"></div></div>
@@ -143,6 +155,7 @@ footer{padding:40px 0 60px;font-size:15px}
       <div class="bars" id="bars"></div>
     </div>
   </div>
+  <div class="capcard" id="cap" aria-live="polite"></div>
 </section>
 
 <section class="wrap">
@@ -209,6 +222,10 @@ footer{padding:40px 0 60px;font-size:15px}
       <div><h3>Fitness is basic training</h3><p>Running, strength, endurance. Every type can train them, like Ten and Ren.</p></div>
     </div>
     <div class="card basic">
+      <svg viewBox="0 0 58 58" aria-hidden="true"><path d="M16 8 V30 M5 19 H27" stroke="var(--abstract)" stroke-width="6" stroke-linecap="round"/><path d="M34 34 L52 52 M52 34 L34 52" stroke="var(--abstract)" stroke-width="6" stroke-linecap="round"/></svg>
+      <div><h3>Mental arithmetic is basic training</h3><p>Fast calculation comes from drilling and working memory, not from your type.</p></div>
+    </div>
+    <div class="card basic">
       <svg viewBox="0 0 58 58" aria-hidden="true"><path d="M29 6 L35 22 L52 22 L38 32 L44 50 L29 39 L14 50 L20 32 L6 22 L23 22 Z" fill="var(--verbal)"/></svg>
       <div><h3>Taste lives in every domain</h3><p>Proust in sentences, a mathematician in proofs, Jobs in products.</p></div>
     </div>
@@ -225,7 +242,7 @@ footer{padding:40px 0 60px;font-size:15px}
 
 <script>
 const T=[
- {n:'Abstract',c:'--abstract',d:'Theory, logic, maths',nat:'Quants, theorists',ic:'<circle cx="12" cy="34" r="7" fill="currentColor"/><circle cx="34" cy="34" r="7" fill="currentColor"/><circle cx="23" cy="12" r="7" fill="currentColor"/><path d="M12 34 L23 12 L34 34 Z" fill="none" stroke="currentColor" stroke-width="3"/>'},
+ {n:'Abstract',c:'--abstract',d:'Theory, logic, structure',nat:'Quants, theorists',ic:'<circle cx="12" cy="34" r="7" fill="currentColor"/><circle cx="34" cy="34" r="7" fill="currentColor"/><circle cx="23" cy="12" r="7" fill="currentColor"/><path d="M12 34 L23 12 L34 34 Z" fill="none" stroke="currentColor" stroke-width="3"/>'},
  {n:'Spatial',c:'--spatial',d:'Seeing structures in 3D',nat:'Engineers, architects',ic:'<path d="M23 4 L42 14 V34 L23 44 L4 34 V14 Z M4 14 L23 24 L42 14 M23 24 V44" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>'},
  {n:'Pragmatic',c:'--pragmatic',d:'Turning ideas into results',nat:'Founders, operators',ic:'<circle cx="23" cy="23" r="19" fill="none" stroke="currentColor" stroke-width="3.5"/><circle cx="23" cy="23" r="10" fill="none" stroke="currentColor" stroke-width="3.5"/><circle cx="23" cy="23" r="3.5" fill="currentColor"/>'},
  {n:'Artistic',c:'--artistic',d:'Sensory art, style, music',nat:'Designers, musicians',ic:'<circle cx="16" cy="18" r="11" fill="currentColor" opacity=".9"/><circle cx="30" cy="18" r="11" fill="currentColor" opacity=".6"/><circle cx="23" cy="30" r="11" fill="currentColor" opacity=".75"/>'},
@@ -233,6 +250,19 @@ const T=[
  {n:'Inner',c:'--inner',d:'Will, calm, self-control',nat:'Monks, great traders',ic:'<circle cx="23" cy="23" r="19" fill="none" stroke="currentColor" stroke-width="3" opacity=".5"/><circle cx="23" cy="23" r="12" fill="none" stroke="currentColor" stroke-width="3" opacity=".8"/><circle cx="23" cy="23" r="5" fill="currentColor"/>'},
  {n:'Social',c:'--social',d:'Reading people, charm',nat:'Seducers, salespeople',ic:'<circle cx="16" cy="14" r="7" fill="currentColor"/><circle cx="31" cy="14" r="7" fill="currentColor" opacity=".7"/><path d="M4 42 a12 12 0 0 1 24 0 Z" fill="currentColor"/><path d="M19 42 a12 12 0 0 1 24 0 Z" fill="currentColor" opacity=".7"/>'},
  {n:'Verbal',c:'--verbal',d:'Language, story, rhetoric',nat:'Writers, lawyers',ic:'<path d="M4 6 H42 V32 H20 L10 42 V32 H4 Z" fill="currentColor"/>'}];
+const CAP=[
+ ["Logical reasoning, comfort with symbols and definitions","Building models, spotting hidden structure","Creating new theory from first principles"],
+ ["Reading maps and diagrams, mental rotation","Visualising in 3D, designing mechanisms","Holding a whole system in your head"],
+ ["Prioritising, getting things done","Resourcefulness, applying tools to real problems","Building something that works from zero"],
+ ["Sense of colour, rhythm and style","Composing visuals, music, spaces, outfits","An original style people recognise"],
+ ["Precise hand control, using tools","Multi-limb coordination: driving, instruments, cooking","Flawless technique under pressure"],
+ ["Self-awareness, naming your emotions","Discipline, calm under pressure","Unshakeable will against fear and impulse"],
+ ["Reading emotions and body language","Charm, persuasion, group dynamics","Leading people who don't have to follow"],
+ ["Clear speech and writing","Storytelling, rhetoric, learning languages","An original voice: words that change minds"]];
+const HINFO=[
+ {sig:"Fuse distant fields into an invention",from:"Spatial · Pragmatic · Abstract · Artistic",who:"Leonardo, Feynman, Turing, Mozart",ic:'<rect x="6" y="30" width="20" height="20" rx="4" fill="currentColor"/><rect x="30" y="30" width="20" height="20" rx="4" fill="currentColor" opacity=".6"/><rect x="18" y="6" width="20" height="20" rx="4" fill="currentColor" opacity=".85"/>'},
+ {sig:"Turn ideas into institutions and movements",from:"Verbal · Social · Abstract · Inner",who:"Franklin, Churchill, Caesar, Goethe",ic:'<path d="M4 8 H52 V38 H24 L12 50 V38 H4 Z" fill="currentColor"/>'},
+ {sig:"Lead through presence in action and crisis",from:"Dexterity · Inner · Social · Artistic",who:"Roosevelt, Ali, Bruce Lee",ic:'<path d="M28 3 L35 20 L53 21 L39 33 L44 51 L28 41 L12 51 L17 33 L3 21 L21 20 Z" fill="currentColor"/>'}];
 const HUBS=[{n:'Builder',a:-22.5,c:'--builder'},{n:'Statesman',a:-157.5,c:'--statesman'},{n:'Commander',a:112.5,c:'--commander'}];
 const PR={
  me:{l:'Theorist',i:0,a:120,w:-1},gf:{l:'Founder',i:2.4,a:110,w:-1},bro:{l:'Craftsman',i:4,a:105,w:-1},fr:{l:'Charismatic leader',i:6,a:150,w:2},
@@ -250,6 +280,7 @@ const V=T.map((t,i)=>[Math.cos(ang(i)),0,Math.sin(ang(i))]);
 HUBS.forEach(h=>{h.r=h.a*Math.PI/180;h.p=[.32*Math.cos(h.r),1.0,.32*Math.sin(h.r)]});
 const AFF=HUBS.map(h=>V.map((v,i)=>{const d=adist(ang(i),h.r);return d<30?3:d<70?2:d<120?1:0}));
 const AFN=['very low','low','high','very high'];
+let sel={k:'t',i:0},lastP=[],lastH=[],down=null;
 let S=Object.assign({},PR.me),cur='me',yaw=.6,pitch=.36,drag=null;
 let auto=!matchMedia('(prefers-reduced-motion: reduce)').matches;
 const spin=document.getElementById('spin');spin.textContent=auto?'pause spin':'spin';
@@ -270,6 +301,18 @@ document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{S.w=+b.datase
 nat.onchange=()=>{S.i=+nat.value;cur=null;draw()};
 document.getElementById('au').oninput=e=>{S.a=+e.target.value;cur=null;draw()};
 
+function showCap(){
+ const el=document.getElementById('cap');
+ if(sel.k==='t'){const i=sel.i,t=T[i];
+  el.style.background='var('+t.c+')';
+  el.innerHTML='<div class="top"><svg viewBox="0 0 46 46" aria-hidden="true">'+t.ic+'</svg><div><h3>'+t.n+'</h3><p class="sub">'+t.d+'</p></div></div>'
+  +'<div class="tiers">'+['Basic','Advanced','Mastery'].map((l,j)=>'<div class="tier"><span>'+l+'</span><b>'+CAP[i][j]+'</b></div>').join('')+'</div>'
+  +'<p class="meta">Neighbours: '+T[(i+7)%8].n+' · '+T[(i+1)%8].n+' &nbsp;|&nbsp; Opposite: '+T[(i+4)%8].n+' &nbsp;|&nbsp; Natives: '+t.nat+'</p>';
+ }else{const h=HUBS[sel.i],x=HINFO[sel.i];
+  el.style.background='var('+h.c+')';
+  el.innerHTML='<div class="top"><svg viewBox="0 0 56 56" aria-hidden="true">'+x.ic+'</svg><div><h3>'+h.n+'</h3><p class="sub">Specialist</p></div></div>'
+  +'<div class="tiers"><div class="tier"><span>Signature</span><b>'+x.sig+'</b></div><div class="tier"><span>Awakens from</span><b>'+x.from+'</b></div><div class="tier"><span>Examples</span><b>'+x.who+'</b></div></div>';}
+}
 function load(k){cur=k;S=Object.assign({},PR[k]);nat.value=Math.round(S.i)%8;document.getElementById('au').value=S.a;draw()}
 function mastery(){const t=ang(S.i),px=.9*Math.cos(t),pz=.9*Math.sin(t),f=.7+.3*S.a/100;
  return V.map((v,i)=>{let x=100-30*Math.hypot(px-v[0],pz-v[2]);
@@ -278,7 +321,7 @@ function mastery(){const t=ang(S.i),px=.9*Math.cos(t),pz=.9*Math.sin(t),f=.7+.3*
 function pj(p){const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
  const x=p[0]*cy-p[2]*sy,z=p[0]*sy+p[2]*cy,y=p[1]*cp-z*sp,zz=p[1]*sp+z*cp;return [300+x*170,290-y*170,zz]}
 function draw(){
- const m=mastery(),P=V.map(pj),H=HUBS.map(h=>pj(h.p));let s='';
+ const m=mastery(),P=V.map(pj),H=HUBS.map(h=>pj(h.p));let s='';lastP=P;lastH=H;
  const ln=(a,c,st,w,da,op)=>'<line x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+c[0].toFixed(1)+'" y2="'+c[1].toFixed(1)+'" stroke="'+st+'" stroke-width="'+w+'" stroke-linecap="round"'+(da?' stroke-dasharray="'+da+'"':'')+(op?' opacity="'+op+'"':'')+'/>';
  const ink=cv('--ink'),line=cv('--line'),surf=cv('--surface');
  HUBS.forEach((h,k)=>P.forEach((p,i)=>{const a=AFF[k][i];if(a>1)s+=ln(p,H[k],cv(h.c),a===3?3.5:1.8,a===3?'':'5 5',S.w===k?1:.55)}));
@@ -288,6 +331,7 @@ function draw(){
  HUBS.forEach((h,k)=>it.push({z:H[k][2],s:'<circle cx="'+H[k][0].toFixed(1)+'" cy="'+H[k][1].toFixed(1)+'" r="15" fill="'+cv(h.c)+'" stroke="'+surf+'" stroke-width="3"/>'}));
  it.push({z:me[2]-.02,s:'<circle cx="'+me[0].toFixed(1)+'" cy="'+me[1].toFixed(1)+'" r="'+(7+S.a/18).toFixed(1)+'" fill="'+ink+'" stroke="'+surf+'" stroke-width="3"/>'});
  it.sort((a,b)=>b.z-a.z).forEach(o=>s+=o.s);
+ {const q=sel.k==='t'?P[sel.i]:H[sel.i],rr=sel.k==='t'?(8+m[sel.i]/7+7):22;s+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="'+rr.toFixed(1)+'" fill="none" stroke="'+ink+'" stroke-width="2.5" stroke-dasharray="4 4"/>';}
  P.forEach((p,i)=>{const r=p[0]>=300;s+='<text x="'+(p[0]+(r?24:-24)).toFixed(1)+'" y="'+p[1].toFixed(1)+'" text-anchor="'+(r?'start':'end')+'" dominant-baseline="central" font-family="DM Sans, sans-serif" font-weight="700" font-size="17" fill="'+cv(T[i].c)+'">'+T[i].n+'</text>'});
  HUBS.forEach((h,k)=>{s+='<text x="'+H[k][0].toFixed(1)+'" y="'+(H[k][1]-26).toFixed(1)+'" text-anchor="middle" dominant-baseline="central" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="19" fill="'+cv(h.c)+'">'+h.n+'</text>'});
  document.getElementById('scene').innerHTML=s;
@@ -300,13 +344,18 @@ function draw(){
  document.querySelectorAll('#circle .chip').forEach(b=>b.classList.toggle('on',b.dataset.p===cur));
 }
 const sv=document.getElementById('sv');
-sv.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];sv.setPointerCapture(e.pointerId);sv.style.cursor='grabbing'});
+sv.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];down=[e.clientX,e.clientY];sv.setPointerCapture(e.pointerId);sv.style.cursor='grabbing'});
 sv.addEventListener('pointermove',e=>{if(!drag)return;yaw-=(e.clientX-drag[0])*.01;pitch=Math.max(-1.1,Math.min(1.1,pitch+(e.clientY-drag[1])*.01));drag=[e.clientX,e.clientY];draw()});
-const end=()=>{drag=null;sv.style.cursor='grab'};sv.addEventListener('pointerup',end);sv.addEventListener('pointercancel',end);
+const end=()=>{drag=null;sv.style.cursor='grab'};
+sv.addEventListener('pointerup',e=>{end();if(!down)return;const mv=Math.hypot(e.clientX-down[0],e.clientY-down[1]);down=null;if(mv>6)return;
+ const pt=sv.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const q=pt.matrixTransform(sv.getScreenCTM().inverse());
+ let best=null,bd=46;lastP.forEach((p,i)=>{const d=Math.hypot(p[0]-q.x,p[1]-q.y);if(d<bd){bd=d;best={k:'t',i}}});
+ lastH.forEach((p,i)=>{const d=Math.hypot(p[0]-q.x,p[1]-q.y);if(d<bd){bd=d;best={k:'h',i}}});
+ if(best){sel=best;showCap();draw()}});sv.addEventListener('pointercancel',end);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
 new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 function loop(){if(auto&&!drag){yaw+=.004;draw()}requestAnimationFrame(loop)}
-load('me');loop();
+load('me');showCap();loop();
 </script>
 </body>
 </html>
