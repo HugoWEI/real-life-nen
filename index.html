@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real-life Nen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* layout: one column, big type, a colorful ring model on top, then rules, types, specialists, gallery */
+  --bg:#F6F5FB; --surface:#FFFFFF; --ink:#16142B; --muted:#5E5B77; --line:#E2E0EE;
+  --abstract:#3F5EFB; --spatial:#1F9DE6; --pragmatic:#0FA894; --artistic:#E8418D;
+  --dexterity:#EE930A; --inner:#8466EE; --social:#E8413F; --verbal:#C99A00;
+  --builder:#3A2FB8; --statesman:#0B7A55; --commander:#D9480F;
+  --display:"Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F0E1A; --surface:#1A1830; --ink:#F2F0FF; --muted:#A9A6C4; --line:#2E2B4A;
+    --abstract:#7C93FF; --spatial:#5BC0FF; --pragmatic:#3DDCC2; --artistic:#FF6FAE;
+    --dexterity:#FFB238; --inner:#AE97FF; --social:#FF6B69; --verbal:#F2C935;
+    --builder:#A99CFF; --statesman:#4ADE9F; --commander:#FF8A5C; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F0E1A; --surface:#1A1830; --ink:#F2F0FF; --muted:#A9A6C4; --line:#2E2B4A;
+  --abstract:#7C93FF; --spatial:#5BC0FF; --pragmatic:#3DDCC2; --artistic:#FF6FAE;
+  --dexterity:#FFB238; --inner:#AE97FF; --social:#FF6B69; --verbal:#F2C935;
+  --builder:#A99CFF; --statesman:#4ADE9F; --commander:#FF8A5C; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-0.02em}
+h1{font-size:clamp(48px,10vw,96px);font-weight:800;line-height:.95}
+h2{font-size:clamp(34px,6vw,54px);font-weight:800;line-height:1;margin-bottom:24px}
+h3{font-size:28px;font-weight:700;line-height:1.1}
+p{margin:0}
+.muted{color:var(--muted)}
+section{padding:56px 0}
+header{padding:48px 0 8px}
+.rainbow{display:flex;gap:6px;margin:20px 0}
+.rainbow span{height:10px;flex:1;border-radius:6px}
+.lead{font-size:clamp(22px,3.4vw,28px);max-width:30ch;margin-top:16px;font-weight:500}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px}
+/* model */
+.model{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.model{grid-template-columns:minmax(0,1fr)}}
+#sv{width:100%;height:auto;display:block;touch-action:none;cursor:grab;user-select:none}
+.hint{font-size:15px;text-align:center;margin-top:4px}
+.group{margin-bottom:16px}
+.group .lbl{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;cursor:pointer}
+.chip{font-size:16px;font-weight:500;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.chip:hover{border-color:var(--muted)}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg button[data-w="0"].on{background:var(--builder);border-color:var(--builder);color:var(--bg)}
+.seg button[data-w="1"].on{background:var(--statesman);border-color:var(--statesman);color:var(--bg)}
+.seg button[data-w="2"].on{background:var(--commander);border-color:var(--commander);color:var(--bg)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--abstract);outline-offset:2px}
+select{font:inherit;font-size:17px;padding:8px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
+input[type=range]{width:100%;accent-color:var(--abstract)}
+.aura{display:flex;gap:12px;align-items:center}
+.aura b{font-variant-numeric:tabular-nums;min-width:3ch;text-align:right;font-size:22px}
+.who{font-family:var(--display);font-size:28px;font-weight:700;line-height:1.1;margin:6px 0 4px}
+.bars{display:grid;grid-template-columns:96px minmax(0,1fr) 40px;gap:8px 10px;align-items:center;font-size:16px;margin-top:14px}
+.bar{height:14px;border-radius:8px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:8px;transition:width .25s}
+.bars b{text-align:right;font-variant-numeric:tabular-nums}
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.rule .n{font-family:var(--display);font-size:56px;font-weight:800;line-height:1;color:var(--abstract)}
+.rule h3{margin:6px 0 8px}
+.rule p{font-size:18px}
+.rule svg{width:100%;height:70px;margin-top:14px;display:block}
+/* types */
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.type{border-radius:22px;padding:20px;color:#fff;min-height:190px;display:flex;flex-direction:column;gap:8px}
+.type svg{width:46px;height:46px}
+.type h3{color:inherit}
+.type p{font-size:17px;opacity:.95}
+.type .nat{font-size:14px;font-weight:700;margin-top:auto;opacity:.9}
+:root[data-theme="dark"] .type{color:#0F0E1A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .type{color:#0F0E1A}}
+.ringnote{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;font-size:18px}
+.ringnote span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 16px}
+/* specialists */
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.spec{border-radius:24px;padding:24px;border:3px solid currentColor;background:var(--surface)}
+.spec h3{font-size:34px}
+.spec .from{font-size:17px;margin:8px 0 14px;color:var(--ink)}
+.spec .ppl{display:flex;flex-wrap:wrap;gap:8px}
+.spec .ppl span{font-size:15px;font-weight:700;padding:6px 12px;border-radius:999px;background:currentColor}
+.spec .ppl span em{font-style:normal;color:var(--bg)}
+.spec svg{width:70px;height:70px;margin-bottom:6px}
+/* basics */
+.basics{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.basic{display:flex;gap:16px;align-items:flex-start}
+.basic svg{flex:none;width:58px;height:58px}
+.basic h3{font-size:24px;margin-bottom:4px}
+.basic p{font-size:18px}
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.person{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:14px;color:var(--ink);display:flex;flex-direction:column;gap:6px}
+.person:hover{border-color:var(--muted)}
+.person b{font-family:var(--display);font-size:21px;line-height:1.1}
+.person .tag{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--muted)}
+.dot{width:12px;height:12px;border-radius:50%;flex:none}
+.pill{font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;color:var(--bg);align-self:flex-start}
+footer{padding:40px 0 60px;font-size:15px}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="rainbow" aria-hidden="true">
+    <span style="background:var(--abstract)"></span><span style="background:var(--spatial)"></span><span style="background:var(--pragmatic)"></span><span style="background:var(--artistic)"></span><span style="background:var(--dexterity)"></span><span style="background:var(--inner)"></span><span style="background:var(--social)"></span><span style="background:var(--verbal)"></span>
+  </div>
+  <h1>Real-life Nen</h1>
+  <p class="lead">Eight types. One you're born with. Three ways to become a Specialist.</p>
+</header>
+
+<section class="wrap" id="model">
+  <div class="model">
+    <div class="card" style="padding:12px">
+      <svg id="sv" viewBox="0 0 600 470" role="img" aria-label="Rotatable 3D ring of eight types with three Specialist hubs above"><g id="scene"></g></svg>
+      <p class="hint muted">Drag to rotate · <a href="#" id="spin">pause spin</a></p>
+    </div>
+    <div class="card">
+      <div class="group"><div class="lbl">Try an archetype</div><div class="chips" id="circle"></div></div>
+      <div class="group"><div class="lbl">Native type</div><select id="nat" aria-label="Native type"></select></div>
+      <div class="group"><div class="lbl">Aura</div><div class="aura"><input type="range" id="au" min="50" max="150" step="1" value="120" aria-label="Aura"><b id="auO">120</b></div></div>
+      <div class="group"><div class="lbl">Awakened as</div><div class="chips seg" id="seg">
+        <button class="chip" data-w="-1">No</button><button class="chip" data-w="0">Builder</button><button class="chip" data-w="1">Statesman</button><button class="chip" data-w="2">Commander</button>
+      </div></div>
+      <p class="who" id="who">Me</p>
+      <p class="muted" id="arch" style="font-size:16px"></p>
+      <div class="bars" id="bars"></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>The rules</h2>
+  <div class="rules">
+    <div class="card rule">
+      <div class="n">1</div><h3>Born with one type</h3><p>Your native type can reach 100%.</p>
+      <svg viewBox="0 0 220 70" aria-hidden="true"><circle cx="110" cy="35" r="28" fill="var(--abstract)"/><circle cx="110" cy="35" r="12" fill="var(--surface)"/></svg>
+    </div>
+    <div class="card rule">
+      <div class="n">2</div><h3>Distance costs</h3><p>Each step around the ring lowers your ceiling.</p>
+      <svg viewBox="0 0 220 70" aria-hidden="true">
+        <rect x="6" y="6" width="34" height="58" rx="6" fill="var(--abstract)"/>
+        <rect x="50" y="15" width="34" height="49" rx="6" fill="var(--abstract)" opacity=".8"/>
+        <rect x="94" y="23" width="34" height="41" rx="6" fill="var(--abstract)" opacity=".6"/>
+        <rect x="138" y="32" width="34" height="32" rx="6" fill="var(--abstract)" opacity=".45"/>
+        <rect x="182" y="41" width="34" height="23" rx="6" fill="var(--abstract)" opacity=".3"/>
+      </svg>
+      <p class="muted" style="font-size:15px;margin-top:6px">100 · 85 · 70 · 55 · 40</p>
+    </div>
+    <div class="card rule">
+      <div class="n">3</div><h3>Aura lifts all</h3><p>Raw power raises every type a little.</p>
+      <svg viewBox="0 0 220 70" aria-hidden="true"><circle cx="110" cy="35" r="14" fill="var(--pragmatic)"/><circle cx="110" cy="35" r="24" fill="none" stroke="var(--pragmatic)" stroke-width="3" opacity=".6"/><circle cx="110" cy="35" r="33" fill="none" stroke="var(--pragmatic)" stroke-width="3" opacity=".3"/></svg>
+    </div>
+    <div class="card rule">
+      <div class="n">4</div><h3>Awaken</h3><p>Rare people become Specialists and flatten their weak spots.</p>
+      <svg viewBox="0 0 220 70" aria-hidden="true"><path d="M30 60 L110 14 L190 60" fill="none" stroke="var(--line)" stroke-width="3"/><circle cx="110" cy="14" r="11" fill="var(--builder)"/><circle cx="30" cy="60" r="7" fill="var(--spatial)"/><circle cx="190" cy="60" r="7" fill="var(--artistic)"/></svg>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>The eight types</h2>
+  <div class="types" id="types"></div>
+  <div class="ringnote"><span>Neighbours transfer easily</span><span>Opposites are 40%</span><span>Top of ring: ideas · Bottom: body</span></div>
+</section>
+
+<section class="wrap">
+  <h2>Three Specialists</h2>
+  <div class="specs">
+    <div class="spec" style="color:var(--builder)">
+      <svg viewBox="0 0 70 70" aria-hidden="true"><rect x="10" y="38" width="22" height="22" rx="4" fill="currentColor"/><rect x="38" y="38" width="22" height="22" rx="4" fill="currentColor" opacity=".6"/><rect x="24" y="12" width="22" height="22" rx="4" fill="currentColor" opacity=".85"/></svg>
+      <h3>Builder</h3><p class="from">Things side: Spatial, Pragmatic, Abstract, Artistic</p>
+      <div class="ppl"><span><em>Leonardo</em></span><span><em>Feynman</em></span><span><em>Turing</em></span><span><em>Mozart</em></span></div>
+    </div>
+    <div class="spec" style="color:var(--statesman)">
+      <svg viewBox="0 0 70 70" aria-hidden="true"><path d="M8 12 H62 V46 H32 L18 60 V46 H8 Z" fill="currentColor"/><rect x="18" y="22" width="34" height="5" rx="2.5" fill="var(--surface)"/><rect x="18" y="32" width="24" height="5" rx="2.5" fill="var(--surface)"/></svg>
+      <h3>Statesman</h3><p class="from">Words side: Verbal, Social, Abstract, Inner</p>
+      <div class="ppl"><span><em>Franklin</em></span><span><em>Churchill</em></span><span><em>Caesar</em></span><span><em>Goethe</em></span></div>
+    </div>
+    <div class="spec" style="color:var(--commander)">
+      <svg viewBox="0 0 70 70" aria-hidden="true"><path d="M35 6 L44 26 L64 28 L49 42 L54 63 L35 52 L16 63 L21 42 L6 28 L26 26 Z" fill="currentColor"/></svg>
+      <h3>Commander</h3><p class="from">Body and will side: Dexterity, Inner, Social, Artistic</p>
+      <div class="ppl"><span><em>Roosevelt</em></span><span><em>Ali</em></span><span><em>Bruce Lee</em></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Not types</h2>
+  <div class="basics">
+    <div class="card basic">
+      <svg viewBox="0 0 58 58" aria-hidden="true"><circle cx="34" cy="10" r="7" fill="var(--pragmatic)"/><path d="M30 20 L22 34 L32 40 L26 54 M22 34 L10 30 M30 22 L44 30" fill="none" stroke="var(--pragmatic)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><h3>Fitness is basic training</h3><p>Running, strength, endurance. Every type can train them, like Ten and Ren.</p></div>
+    </div>
+    <div class="card basic">
+      <svg viewBox="0 0 58 58" aria-hidden="true"><path d="M29 6 L35 22 L52 22 L38 32 L44 50 L29 39 L14 50 L20 32 L6 22 L23 22 Z" fill="var(--verbal)"/></svg>
+      <div><h3>Taste lives in every domain</h3><p>Proust in sentences, a mathematician in proofs, Jobs in products.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Who goes where</h2>
+  <p class="muted" style="margin:-10px 0 20px;font-size:18px">Tap anyone to load them into the model.</p>
+  <div class="gallery" id="gallery"></div>
+</section>
+
+<footer class="wrap muted">A thought experiment inspired by Hunter × Hunter. Placements are playful estimates, not measurements. · <a href="https://hugowei.github.io/" style="color:inherit">Hugo Wei</a></footer>
+
+<script>
+const T=[
+ {n:'Abstract',c:'--abstract',d:'Theory, logic, maths',nat:'Quants, theorists',ic:'<circle cx="12" cy="34" r="7" fill="currentColor"/><circle cx="34" cy="34" r="7" fill="currentColor"/><circle cx="23" cy="12" r="7" fill="currentColor"/><path d="M12 34 L23 12 L34 34 Z" fill="none" stroke="currentColor" stroke-width="3"/>'},
+ {n:'Spatial',c:'--spatial',d:'Seeing structures in 3D',nat:'Engineers, architects',ic:'<path d="M23 4 L42 14 V34 L23 44 L4 34 V14 Z M4 14 L23 24 L42 14 M23 24 V44" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>'},
+ {n:'Pragmatic',c:'--pragmatic',d:'Turning ideas into results',nat:'Founders, operators',ic:'<circle cx="23" cy="23" r="19" fill="none" stroke="currentColor" stroke-width="3.5"/><circle cx="23" cy="23" r="10" fill="none" stroke="currentColor" stroke-width="3.5"/><circle cx="23" cy="23" r="3.5" fill="currentColor"/>'},
+ {n:'Artistic',c:'--artistic',d:'Sensory art, style, music',nat:'Designers, musicians',ic:'<circle cx="16" cy="18" r="11" fill="currentColor" opacity=".9"/><circle cx="30" cy="18" r="11" fill="currentColor" opacity=".6"/><circle cx="23" cy="30" r="11" fill="currentColor" opacity=".75"/>'},
+ {n:'Dexterity',c:'--dexterity',d:'Complex manual skill',nat:'Craftsmen, chefs, athletes',ic:'<path d="M14 42 V20 a3 3 0 0 1 6 0 V8 a3 3 0 0 1 6 0 V20 V10 a3 3 0 0 1 6 0 V22 V16 a3 3 0 0 1 6 0 V30 C38 38 32 44 24 44 Z" fill="currentColor"/>'},
+ {n:'Inner',c:'--inner',d:'Will, calm, self-control',nat:'Monks, great traders',ic:'<circle cx="23" cy="23" r="19" fill="none" stroke="currentColor" stroke-width="3" opacity=".5"/><circle cx="23" cy="23" r="12" fill="none" stroke="currentColor" stroke-width="3" opacity=".8"/><circle cx="23" cy="23" r="5" fill="currentColor"/>'},
+ {n:'Social',c:'--social',d:'Reading people, charm',nat:'Seducers, salespeople',ic:'<circle cx="16" cy="14" r="7" fill="currentColor"/><circle cx="31" cy="14" r="7" fill="currentColor" opacity=".7"/><path d="M4 42 a12 12 0 0 1 24 0 Z" fill="currentColor"/><path d="M19 42 a12 12 0 0 1 24 0 Z" fill="currentColor" opacity=".7"/>'},
+ {n:'Verbal',c:'--verbal',d:'Language, story, rhetoric',nat:'Writers, lawyers',ic:'<path d="M4 6 H42 V32 H20 L10 42 V32 H4 Z" fill="currentColor"/>'}];
+const HUBS=[{n:'Builder',a:-22.5,c:'--builder'},{n:'Statesman',a:-157.5,c:'--statesman'},{n:'Commander',a:112.5,c:'--commander'}];
+const PR={
+ me:{l:'Theorist',i:0,a:120,w:-1},gf:{l:'Founder',i:2.4,a:110,w:-1},bro:{l:'Craftsman',i:4,a:105,w:-1},fr:{l:'Charismatic leader',i:6,a:150,w:2},
+ leo:{l:'Leonardo',i:2.5,a:150,w:0},fey:{l:'Feynman',i:0,a:150,w:0},tu:{l:'Turing',i:0,a:145,w:0},moz:{l:'Mozart',i:3,a:145,w:0},
+ ein:{l:'Einstein',i:.3,a:140,w:-1},gra:{l:'Temple Grandin',i:1,a:130,w:-1},
+ fra:{l:'Franklin',i:7,a:145,w:1},chu:{l:'Churchill',i:6.6,a:140,w:1},cae:{l:'Julius Caesar',i:6.5,a:145,w:1},
+ pro:{l:'Proust',i:6.6,a:140,w:-1},tol:{l:'Tolkien',i:7.3,a:140,w:-1},
+ roo:{l:'Roosevelt',i:6.5,a:145,w:2},ali:{l:'Muhammad Ali',i:4.4,a:145,w:2},jor:{l:'Michael Jordan',i:4,a:140,w:-1}};
+const CIRCLE=['me','gf','bro','fr'];
+const GAL=['leo','fey','tu','moz','ein','gra','fra','chu','cae','pro','tol','roo','ali','jor'];
+const cv=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+const ang=i=>(-90+45*i)*Math.PI/180;
+const adist=(a,b)=>{let d=Math.abs(a-b)*180/Math.PI%360;return d>180?360-d:d};
+const V=T.map((t,i)=>[Math.cos(ang(i)),0,Math.sin(ang(i))]);
+HUBS.forEach(h=>{h.r=h.a*Math.PI/180;h.p=[.32*Math.cos(h.r),1.0,.32*Math.sin(h.r)]});
+const AFF=HUBS.map(h=>V.map((v,i)=>{const d=adist(ang(i),h.r);return d<30?3:d<70?2:d<120?1:0}));
+const AFN=['very low','low','high','very high'];
+let S=Object.assign({},PR.me),cur='me',yaw=.6,pitch=.36,drag=null;
+let auto=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+const spin=document.getElementById('spin');spin.textContent=auto?'pause spin':'spin';
+spin.onclick=e=>{e.preventDefault();auto=!auto;spin.textContent=auto?'pause spin':'spin'};
+
+/* type cards */
+document.getElementById('types').innerHTML=T.map(t=>'<div class="type" style="background:var('+t.c+')"><svg viewBox="0 0 46 46" aria-hidden="true">'+t.ic+'</svg><h3>'+t.n+'</h3><p>'+t.d+'</p><span class="nat">'+t.nat+'</span></div>').join('');
+/* controls */
+const nat=document.getElementById('nat');
+T.forEach((t,i)=>{const o=document.createElement('option');o.value=i;o.textContent=t.n;nat.appendChild(o)});
+document.getElementById('circle').innerHTML=CIRCLE.map(k=>'<button class="chip" data-p="'+k+'">'+PR[k].l+'</button>').join('');
+document.getElementById('bars').innerHTML=T.map((t,i)=>'<span>'+t.n+'</span><div class="bar"><i id="b'+i+'" style="background:var('+t.c+')"></i></div><b id="v'+i+'"></b>').join('');
+/* gallery */
+document.getElementById('gallery').innerHTML=GAL.map(k=>{const p=PR[k],ni=Math.round(p.i)%8;
+ return '<button class="person" data-p="'+k+'"><b>'+p.l+'</b><span class="tag"><span class="dot" style="background:var('+T[ni].c+')"></span>'+T[ni].n+'</span>'+(p.w>=0?'<span class="pill" style="background:var('+HUBS[p.w].c+')">'+HUBS[p.w].n+'</span>':'<span class="pill" style="background:var(--muted)">Pure</span>')+'</button>'}).join('');
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{load(b.dataset.p);if(b.classList.contains('person'))document.getElementById('model').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})});
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{S.w=+b.dataset.w;cur=null;draw()});
+nat.onchange=()=>{S.i=+nat.value;cur=null;draw()};
+document.getElementById('au').oninput=e=>{S.a=+e.target.value;cur=null;draw()};
+
+function load(k){cur=k;S=Object.assign({},PR[k]);nat.value=Math.round(S.i)%8;document.getElementById('au').value=S.a;draw()}
+function mastery(){const t=ang(S.i),px=.9*Math.cos(t),pz=.9*Math.sin(t),f=.7+.3*S.a/100;
+ return V.map((v,i)=>{let x=100-30*Math.hypot(px-v[0],pz-v[2]);
+  if(S.w>=0){const tg=90-22*adist(ang(i),HUBS[S.w].r)/180;x=.35*x+.65*tg}
+  return Math.max(0,Math.min(100,x*f))})}
+function pj(p){const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+ const x=p[0]*cy-p[2]*sy,z=p[0]*sy+p[2]*cy,y=p[1]*cp-z*sp,zz=p[1]*sp+z*cp;return [300+x*170,290-y*170,zz]}
+function draw(){
+ const m=mastery(),P=V.map(pj),H=HUBS.map(h=>pj(h.p));let s='';
+ const ln=(a,c,st,w,da,op)=>'<line x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+c[0].toFixed(1)+'" y2="'+c[1].toFixed(1)+'" stroke="'+st+'" stroke-width="'+w+'" stroke-linecap="round"'+(da?' stroke-dasharray="'+da+'"':'')+(op?' opacity="'+op+'"':'')+'/>';
+ const ink=cv('--ink'),line=cv('--line'),surf=cv('--surface');
+ HUBS.forEach((h,k)=>P.forEach((p,i)=>{const a=AFF[k][i];if(a>1)s+=ln(p,H[k],cv(h.c),a===3?3.5:1.8,a===3?'':'5 5',S.w===k?1:.55)}));
+ P.forEach((p,i)=>{s+=ln(p,P[(i+1)%8],line,3)});
+ const t=ang(S.i),me=S.w>=0?pj([HUBS[S.w].p[0],HUBS[S.w].p[1]-.16,HUBS[S.w].p[2]]):pj([.9*Math.cos(t),0,.9*Math.sin(t)]);
+ const it=P.map((p,i)=>({z:p[2],s:'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(8+m[i]/7).toFixed(1)+'" fill="'+cv(T[i].c)+'" fill-opacity="'+(.3+.7*m[i]/100).toFixed(2)+'" stroke="'+cv(T[i].c)+'" stroke-width="2"/>'}));
+ HUBS.forEach((h,k)=>it.push({z:H[k][2],s:'<circle cx="'+H[k][0].toFixed(1)+'" cy="'+H[k][1].toFixed(1)+'" r="15" fill="'+cv(h.c)+'" stroke="'+surf+'" stroke-width="3"/>'}));
+ it.push({z:me[2]-.02,s:'<circle cx="'+me[0].toFixed(1)+'" cy="'+me[1].toFixed(1)+'" r="'+(7+S.a/18).toFixed(1)+'" fill="'+ink+'" stroke="'+surf+'" stroke-width="3"/>'});
+ it.sort((a,b)=>b.z-a.z).forEach(o=>s+=o.s);
+ P.forEach((p,i)=>{const r=p[0]>=300;s+='<text x="'+(p[0]+(r?24:-24)).toFixed(1)+'" y="'+p[1].toFixed(1)+'" text-anchor="'+(r?'start':'end')+'" dominant-baseline="central" font-family="DM Sans, sans-serif" font-weight="700" font-size="17" fill="'+cv(T[i].c)+'">'+T[i].n+'</text>'});
+ HUBS.forEach((h,k)=>{s+='<text x="'+H[k][0].toFixed(1)+'" y="'+(H[k][1]-26).toFixed(1)+'" text-anchor="middle" dominant-baseline="central" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="19" fill="'+cv(h.c)+'">'+h.n+'</text>'});
+ document.getElementById('scene').innerHTML=s;
+ m.forEach((x,i)=>{document.getElementById('b'+i).style.width=x.toFixed(0)+'%';document.getElementById('v'+i).textContent=Math.round(x)});
+ document.getElementById('auO').textContent=S.a;
+ const ni=Math.round(S.i)%8;
+ document.getElementById('who').textContent=cur?PR[cur].l:'Custom';
+ document.getElementById('arch').textContent=T[ni].n+' native'+(S.w>=0?' · awakened as '+HUBS[S.w].n:' · affinity: Builder '+AFN[AFF[0][ni]]+', Statesman '+AFN[AFF[1][ni]]+', Commander '+AFN[AFF[2][ni]]);
+ document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',+b.dataset.w===S.w));
+ document.querySelectorAll('#circle .chip').forEach(b=>b.classList.toggle('on',b.dataset.p===cur));
+}
+const sv=document.getElementById('sv');
+sv.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];sv.setPointerCapture(e.pointerId);sv.style.cursor='grabbing'});
+sv.addEventListener('pointermove',e=>{if(!drag)return;yaw-=(e.clientX-drag[0])*.01;pitch=Math.max(-1.1,Math.min(1.1,pitch+(e.clientY-drag[1])*.01));drag=[e.clientX,e.clientY];draw()});
+const end=()=>{drag=null;sv.style.cursor='grab'};sv.addEventListener('pointerup',end);sv.addEventListener('pointercancel',end);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+function loop(){if(auto&&!drag){yaw+=.004;draw()}requestAnimationFrame(loop)}
+load('me');loop();
+</script>
+</body>
+</html>
