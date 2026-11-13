@@ -424,7 +424,20 @@ function qscore(){
  return {sc,i,idx,lean,aura,h,awake,lo};
 }
 function qresult(){
- const r=qscore(),t=T[r.i],nb=r.lean>=0?T[(r.i+1)%8]:T[(r.i+7)%8];
+ const r0=qscore(),rng=Math.max(...r0.sc)-Math.min(...r0.sc),same=qa.every(v=>v===qa[0]);
+ if(rng<12){
+  PR.quiz={l:'Your result',i:r0.i,a:r0.aura,w:-1};
+  document.getElementById('qbox').style.display='none';
+  const el=document.getElementById('qres');el.style.display='grid';el.style.background='var(--muted)';
+  el.innerHTML='<div class="top"><div><h3>Balanced profile</h3><p class="sub">No clear native type · aura '+r0.aura+'</p></div></div>'
+  +'<div class="tiers"><div class="tier"><span>What it means</span><b>You rated every type about the same, so the quiz can\'t find your native.</b></div>'
+  +'<div class="tier"><span>Try this</span><b>'+(same?'You gave the same answer to all 24. ':'')+'Retake and ask yourself which skills feel effortless, not just which ones you can do.</b></div>'
+  +(r0.sc[0]>=70?'<div class="tier"><span>Specialist?</span><b>A high, flat profile is what Specialists look like, but real ones are rare. A more honest retake will tell.</b></div>':'')+'</div>'
+  +'<div class="ractions"><button class="solid" id="qagain"><span>Retake</span></button></div>';
+  document.getElementById('qagain').onclick=()=>{qa.fill(0);qi=0;el.style.display='none';document.getElementById('qbox').style.display='block';qshow()};
+  return;
+ }
+ const r=r0,t=T[r.i],nb=r.lean>=0?T[(r.i+1)%8]:T[(r.i+7)%8];
  PR.quiz={l:'Your result',i:r.idx,a:r.aura,w:r.awake?r.h:-1};
  document.getElementById('qbox').style.display='none';
  const el=document.getElementById('qres');el.style.display='grid';el.style.background='var('+t.c+')';
