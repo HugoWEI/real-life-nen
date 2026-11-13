@@ -110,6 +110,11 @@ input[type=range]{width:100%;accent-color:var(--abstract)}
 .scale button{font-family:var(--display);font-weight:800;font-size:24px;padding:16px 0;border-radius:18px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
 .scale button:hover{border-color:var(--muted)}
 .scale button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pair{display:grid;gap:12px;margin-top:22px}
+.pair button{font-family:var(--display);font-weight:700;font-size:clamp(20px,3.6vw,26px);line-height:1.2;text-align:left;padding:20px 22px;border-radius:20px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+.pair button:hover{border-color:var(--muted)}
+.pair button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pair .or{font-size:14px;color:var(--muted);text-align:center;letter-spacing:.1em}
 .ends{display:flex;justify-content:space-between;font-size:15px;color:var(--muted);margin-top:8px}
 .qnav{margin-top:18px;display:flex;gap:10px}
 .qnav button{font-size:16px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
@@ -181,13 +186,14 @@ footer{padding:40px 0 60px;font-size:15px}
 
 <section class="wrap" id="quiz">
   <h2>Find your type</h2>
-  <p class="muted" style="margin:-10px 0 20px;font-size:18px">24 quick statements. Answer from 1 (not me) to 5 (totally me).</p>
+  <p class="muted" style="margin:-10px 0 20px;font-size:18px">32 quick taps. Rate yourself, then pick the easier of two.</p>
   <div class="quiz card" id="qbox">
     <div class="qprog"><i id="qbar"></i></div>
     <div class="qmeta"><span id="qnum">1 / 24</span><span id="qtype"></span></div>
     <p class="qtext" id="qtext"></p>
     <div class="scale" id="scale"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button></div>
-    <div class="ends"><span>Not me</span><span>Totally me</span></div>
+    <div class="ends" id="ends"><span>Not me</span><span>Totally me</span></div>
+    <div class="pair" id="pair" style="display:none"><button id="pa"></button><span class="or">OR</span><button id="pb"></button></div>
     <div class="qnav"><button id="qback">Back</button></div>
   </div>
   <div class="capcard" id="qres" aria-live="polite" style="display:none;max-width:720px"></div>
@@ -372,7 +378,7 @@ sv.addEventListener('pointerup',e=>{end();if(!down)return;const mv=Math.hypot(e.
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
 new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 function loop(){if(auto&&!drag){yaw+=.004;draw()}requestAnimationFrame(loop)}
-const QS=[
+const LK=[
  [0,"I enjoy understanding why something works, not just that it works."],
  [1,"I can rotate or assemble objects in my head easily."],
  [2,"I learn a new tool by using it on a real problem, not by reading how it works."],
@@ -381,58 +387,70 @@ const QS=[
  [5,"I stay calm when others panic."],
  [6,"I can read a room within minutes."],
  [7,"Writing or speaking clearly comes naturally to me."],
- [0,"Proofs, definitions and formal rules feel natural to me."],
+ [0,"I often spot the hidden pattern or structure others miss."],
  [1,"I rarely get lost, and I read maps or plans quickly."],
- [2,"I quickly see what matters and drop the rest."],
+ [2,"I'd rather ship something imperfect than theorise forever."],
  [3,"I notice when colours, sounds or proportions feel off."],
  [4,"Tasks that need hands and eyes together, like driving or cooking, feel easy."],
  [5,"I can stick to a hard routine for months."],
- [6,"Charming or persuading people comes easily to me."],
- [7,"I love telling stories, arguing a point or playing with words."],
- [0,"I often spot the hidden pattern or structure others miss."],
- [1,"I understand how a machine works just by looking at it."],
- [2,"I'd rather ship something imperfect than theorise forever."],
- [3,"I make things where the look or feel matters: music, drawing, styling."],
- [4,"My hands do precise work without me thinking about it."],
- [5,"I usually know exactly what I feel and why."],
  [6,"People tend to follow my lead in a group."],
  [7,"I pick up new languages and words easily."]];
+const PH=[
+ ["Following a tricky proof","Spotting the pattern in messy data","Understanding a new theory","Finding the flaw in an argument"],
+ ["Reading a map in a new city","Picturing how furniture fits a room","Understanding a diagram of a machine","Imagining a 3D object from a flat drawing"],
+ ["Finding a workaround when plans break","Turning a vague goal into a to-do list","Getting a messy project over the line","Picking a good-enough tool and moving on"],
+ ["Choosing an outfit that really works","Making a room look good","Hearing when a song is off-key","Picking colours for a design"],
+ ["Parallel parking","Learning a new sport move","Fixing something small with your hands","Chopping vegetables fast and evenly"],
+ ["Staying calm in a crisis","Keeping a habit for months","Not reacting when someone provokes you","Knowing what you really feel"],
+ ["Making a stranger like you","Sensing tension in a room","Getting a group to follow your plan","Charming someone on a first date"],
+ ["Writing a clear email fast","Telling a story people remember","Winning a debate with words","Picking up phrases in a new language"]];
+const PAIRS=[[0,1],[2,5],[3,4],[6,1],[5,6],[7,2],[7,0],[0,3],[1,2],[4,7],[4,5],[5,0],[6,7],[3,6],[2,3],[1,4]];
+const QS=[];{const used=[0,0,0,0,0,0,0,0];const mk=([a,b])=>({k:'P',a,b,ta:PH[a][used[a]++],tb:PH[b][used[b]++]});
+ LK.slice(0,8).forEach(x=>QS.push({k:'L',t:x[0],txt:x[1]}));PAIRS.slice(0,8).forEach(x=>QS.push(mk(x)));
+ LK.slice(8).forEach(x=>QS.push({k:'L',t:x[0],txt:x[1]}));PAIRS.slice(8).forEach(x=>QS.push(mk(x)));}
 const GATE=[[1,2,0,3],[7,6,0,5],[4,5,6,3]];
 let qa=new Array(QS.length).fill(0),qi=0;
 function qshow(){
- const [t,txt]=QS[qi];
- document.getElementById('qtext').textContent=txt;
+ const q=QS[qi],isL=q.k==='L';
+ document.getElementById('qtext').textContent=isL?q.txt:'Which comes easier to you?';
  document.getElementById('qnum').textContent=(qi+1)+' / '+QS.length;
  document.getElementById('qtype').textContent='';
- const b=document.getElementById('qbar');b.style.width=(qi/QS.length*100).toFixed(1)+'%';b.style.background='var('+T[t].c+')';
- document.querySelectorAll('#scale button').forEach(x=>x.classList.toggle('on',+x.dataset.v===qa[qi]));
+ const b=document.getElementById('qbar');b.style.width=(qi/QS.length*100).toFixed(1)+'%';b.style.background='var('+T[isL?q.t:q.a].c+')';
+ document.getElementById('scale').style.display=isL?'grid':'none';
+ document.getElementById('ends').style.display=isL?'flex':'none';
+ document.getElementById('pair').style.display=isL?'none':'grid';
+ if(isL)document.querySelectorAll('#scale button').forEach(x=>x.classList.toggle('on',+x.dataset.v===qa[qi]));
+ else{const pa=document.getElementById('pa'),pb=document.getElementById('pb');pa.textContent=q.ta;pb.textContent=q.tb;pa.classList.toggle('on',qa[qi]===1);pb.classList.toggle('on',qa[qi]===2)}
  document.getElementById('qback').style.visibility=qi>0?'visible':'hidden';
 }
+function answer(v){qa[qi]=v;if(qi<QS.length-1){qi++;qshow()}else qresult()}
 function qscore(){
- const sc=T.map((t,i)=>{const v=QS.map((q,j)=>q[0]===i?qa[j]:null).filter(x=>x);return (v.reduce((a,b)=>a+b,0)/v.length-1)/4*100});
- const mean=sc.reduce((a,b)=>a+b,0)/8;
+ const L=[0,0,0,0,0,0,0,0],Ln=[0,0,0,0,0,0,0,0],W=[0,0,0,0,0,0,0,0],Wn=[0,0,0,0,0,0,0,0];
+ QS.forEach((q,j)=>{if(q.k==='L'){L[q.t]+=(qa[j]-1)/4*100;Ln[q.t]++}else{Wn[q.a]++;Wn[q.b]++;W[qa[j]===1?q.a:q.b]++}});
+ const lv=L.map((x,i)=>x/Ln[i]),wv=W.map((x,i)=>x/Wn[i]*100);
+ const sc=lv.map((x,i)=>.5*x+.5*wv[i]);
+ const meanL=lv.reduce((a,b)=>a+b,0)/8;
  let i=0;sc.forEach((x,j)=>{if(x>sc[i])i=j});
- const L=sc[(i+7)%8],R=sc[(i+1)%8];
- const lean=Math.max(-.45,Math.min(.45,(R-L)/Math.max(1,sc[i]-Math.min(L,R))*.25));
+ const Lf=sc[(i+7)%8],R=sc[(i+1)%8];
+ const lean=Math.max(-.45,Math.min(.45,(R-Lf)/Math.max(1,sc[i]-Math.min(Lf,R))*.25));
  const idx=(i+lean+8)%8;
- const aura=Math.round(Math.max(50,Math.min(150,60+mean*.85)));
- const sorted=[...sc].sort((a,b)=>a-b);
+ const aura=Math.round(Math.max(50,Math.min(150,60+meanL*.85)));
  const hubAvg=GATE.map(g=>g.reduce((a,k)=>a+sc[k],0)/g.length);
  let h=0;hubAvg.forEach((x,k)=>{if(x>hubAvg[h])h=k});
- const awake=mean>=68&&sorted[2]>=55;
+ const ls=[...lv].sort((a,b)=>a-b);
+ const awake=meanL>=75&&ls[2]>=62;
  let lo=0;sc.forEach((x,j)=>{if(x<sc[lo])lo=j});
- return {sc,i,idx,lean,aura,h,awake,lo};
+ return {sc,i,idx,lean,aura,h,awake,lo,meanL};
 }
 function qresult(){
- const r0=qscore(),rng=Math.max(...r0.sc)-Math.min(...r0.sc),same=qa.every(v=>v===qa[0]);
+ const r0=qscore(),rng=Math.max(...r0.sc)-Math.min(...r0.sc),lks=QS.map((q,j)=>q.k==='L'?qa[j]:null).filter(x=>x),same=lks.every(v=>v===lks[0]);
  if(rng<12){
   PR.quiz={l:'Your result',i:r0.i,a:r0.aura,w:-1};
   document.getElementById('qbox').style.display='none';
   const el=document.getElementById('qres');el.style.display='grid';el.style.background='var(--muted)';
   el.innerHTML='<div class="top"><div><h3>Balanced profile</h3><p class="sub">No clear native type · aura '+r0.aura+'</p></div></div>'
-  +'<div class="tiers"><div class="tier"><span>What it means</span><b>You rated every type about the same, so the quiz can\'t find your native.</b></div>'
-  +'<div class="tier"><span>Try this</span><b>'+(same?'You gave the same answer to all 24. ':'')+'Retake and ask yourself which skills feel effortless, not just which ones you can do.</b></div>'
-  +(r0.sc[0]>=70?'<div class="tier"><span>Specialist?</span><b>A high, flat profile is what Specialists look like, but real ones are rare. A more honest retake will tell.</b></div>':'')+'</div>'
+  +'<div class="tiers"><div class="tier"><span>What it means</span><b>Your answers rate every type about the same, so the quiz can\'t find your native.</b></div>'
+  +'<div class="tier"><span>Try this</span><b>'+(same?'You gave every statement the same rating. ':'')+'Retake and go with your gut on the either-or questions.</b></div></div>'
   +'<div class="ractions"><button class="solid" id="qagain"><span>Retake</span></button></div>';
   document.getElementById('qagain').onclick=()=>{qa.fill(0);qi=0;el.style.display='none';document.getElementById('qbox').style.display='block';qshow()};
   return;
@@ -450,7 +468,9 @@ function qresult(){
  document.getElementById('qload').onclick=()=>{load('quiz');sel={k:'t',i:r.i};showCap();draw();document.getElementById('model').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})};
  document.getElementById('qagain').onclick=()=>{qa.fill(0);qi=0;el.style.display='none';document.getElementById('qbox').style.display='block';qshow()};
 }
-document.querySelectorAll('#scale button').forEach(b=>b.onclick=()=>{qa[qi]=+b.dataset.v;if(qi<QS.length-1){qi++;qshow()}else qresult()});
+document.querySelectorAll('#scale button').forEach(b=>b.onclick=()=>answer(+b.dataset.v));
+document.getElementById('pa').onclick=()=>answer(1);
+document.getElementById('pb').onclick=()=>answer(2);
 document.getElementById('qback').onclick=()=>{if(qi>0){qi--;qshow()}};
 qshow();
 load('me');showCap();loop();
