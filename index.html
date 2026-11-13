@@ -458,11 +458,19 @@ function qresult(){
  const r=r0,t=T[r.i],nb=r.lean>=0?T[(r.i+1)%8]:T[(r.i+7)%8];
  PR.quiz={l:'Your result',i:r.idx,a:r.aura,w:r.awake?r.h:-1};
  document.getElementById('qbox').style.display='none';
- const el=document.getElementById('qres');el.style.display='grid';el.style.background='var('+t.c+')';
- el.innerHTML='<div class="top"><svg viewBox="0 0 46 46" aria-hidden="true">'+t.ic+'</svg><div><h3>'+t.n+' native</h3><p class="sub">'+(Math.abs(r.lean)>.08?'Leaning '+nb.n:'Pure '+t.n)+' · aura '+r.aura+'</p></div></div>'
- +'<div class="tiers"><div class="tier"><span>Master next</span><b>'+CAP[r.i][1]+'</b></div>'
- +'<div class="tier"><span>Weak spot</span><b>'+T[r.lo].n+'</b></div>'
- +'<div class="tier"><span>Specialist</span><b>'+(r.awake?'Awakened as '+HUBS[r.h].n+': '+HINFO[r.h].sig.toLowerCase():'Closest to '+HUBS[r.h].n+', not awakened')+'</b></div></div>'
+ const el=document.getElementById('qres');el.style.display='grid';
+ const leanTxt=(Math.abs(r.lean)>.08?'leaning '+nb.n:'pure');
+ if(r.awake){const H=HUBS[r.h],X=HINFO[r.h];el.style.background='var('+H.c+')';
+  el.innerHTML='<div class="top"><svg viewBox="0 0 56 56" aria-hidden="true">'+X.ic+'</svg><div><h3>Awakened '+H.n+'</h3><p class="sub">'+t.n+' native · '+leanTxt+' · aura '+r.aura+'</p></div></div>'
+  +'<div class="tiers"><div class="tier"><span>Signature</span><b>'+X.sig+'</b></div>'
+  +'<div class="tier"><span>Master next</span><b>'+CAP[r.i][1]+'</b></div>'
+  +'<div class="tier"><span>Weak spot</span><b>'+T[r.lo].n+'</b></div></div>';
+ }else{el.style.background='var('+t.c+')';
+  el.innerHTML='<div class="top"><svg viewBox="0 0 46 46" aria-hidden="true">'+t.ic+'</svg><div><h3>'+t.n+' native</h3><p class="sub">'+(Math.abs(r.lean)>.08?'Leaning '+nb.n:'Pure '+t.n)+' · aura '+r.aura+'</p></div></div>'
+  +'<div class="tiers"><div class="tier"><span>Master next</span><b>'+CAP[r.i][1]+'</b></div>'
+  +'<div class="tier"><span>Weak spot</span><b>'+T[r.lo].n+'</b></div>'
+  +'<div class="tier"><span>Specialist</span><b>Closest to '+HUBS[r.h].n+', not awakened</b></div></div>';}
+ el.innerHTML+=''
  +'<div class="rbars">'+T.map((x,j)=>'<span>'+x.n+'</span><div class="bar"><i style="width:'+r.sc[j].toFixed(0)+'%"></i></div><b style="text-align:right">'+Math.round(r.sc[j])+'</b>').join('')+'</div>'
  +'<div class="ractions"><button class="solid" id="qload"><span>See me in the model</span></button><button id="qagain">Retake</button></div>';
  document.getElementById('qload').onclick=()=>{load('quiz');sel={k:'t',i:r.i};showCap();draw();document.getElementById('model').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})};
